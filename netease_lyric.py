@@ -114,7 +114,7 @@ class Playlist():
 		self.playlist_name = playlist['result']['name']
 		self.playlist = playlist['result']['tracks']
 		print(u'歌单名：《%s》，歌曲数：%d' % (self.playlist_name, len(self.playlist)))
-		
+
 		for song in self.playlist:
 			self.song_name.append(song["name"])
 			self.song_id.append(song["id"])
@@ -207,7 +207,7 @@ class Img():
 	def __init__(self, save_dir=None):
 		self.save_dir = save_dir
 
-		self.font_family = 'res/STHeiti_Light.ttc'
+		self.font_family = 'static/STHeiti_Light.ttc'
 		self.font_size = 30 # 字体大小
 		self.line_space = 30 # 行间隔大小
 		self.word_space = 5
@@ -219,14 +219,14 @@ class Img():
 		self.netease_banner = u'来自网易云音乐•歌词分享'
 		self.netease_banner_color = '#D3D7D9'
 		self.netease_banner_size = 20
-		self.netease_icon = 'res/netease_icon.png'
+		self.netease_icon = 'static/netease_icon.png'
 		self.icon_width = 25
 
 		self.style2_margin = 50
 		self.style2_padding = 30
 		self.style2_line_width = 2
 		self.style2_quote_width = 30
-		self.quote_icon = 'res/quote.png'
+		self.quote_icon = 'static/quote.png'
 
 		if self.save_dir is not None:
 			try:
@@ -241,14 +241,14 @@ class Img():
 
 		padding = self.padding
 		w = self.share_img_width
-		
+
 		album_img = None
 		if img_url.startswith('http'):
 			raw_img = requests.get(img_url)
 			album_img = Image.open(BytesIO(raw_img.content))
 		else:
 			album_img = Image.open(img_url)
-		
+
 		iw, ih = album_img.size
 		album_h = ih *  w // iw
 
@@ -263,23 +263,23 @@ class Img():
 
 		# 添加封面
 		out_img.paste(resized_album, (0, 0))
-		
+
 		# 添加文字
 		draw.text((padding, album_h + padding), lrc, font=lyric_font, fill=self.text_color, spacing=self.line_space)
-		
+
 		# Python中字符串类型分为byte string 和 unicode string两种，'——'为中文标点byte string，需转换为unicode string
 		y_song_name = album_h + padding + lyric_h + self.song_name_space
 		# song_name = unicode('—— 「', "utf-8") + name + unicode('」', "utf-8")
 		song_name = u'—— 「' + name + u'」'
 		sw, sh = draw.textsize(song_name, font=lyric_font)
 		draw.text((w - padding - sw, y_song_name), song_name, font=lyric_font, fill=self.text_color)
-		
+
 		# 添加网易标签
 		y_netease_banner = h - padding - self.netease_banner_size
 		out_img.paste(icon, (padding, y_netease_banner - 2))
 		draw.text((padding + self.icon_width + 5, y_netease_banner), self.netease_banner, font=banner_font, fill=self.netease_banner_color)
-		
-		img_save_path = ''
+
+		img_save_path = 'output/'
 		if self.save_dir is not None:
 			img_save_path = self.save_dir
 		out_img.save(img_save_path + name + '.png')
@@ -312,22 +312,22 @@ class Img():
 		out_img.paste(quote, (margin - self.style2_quote_width // 2, margin + self.style2_quote_width // 2))
 		quote = quote.rotate(180)
 		out_img.paste(quote, (w - margin - self.style2_quote_width // 2, margin + rect_h - self.style2_quote_width - self.style2_quote_width // 2))
-		
+
 		# 添加文字
 		draw.text((margin + padding, margin + padding), lrc, font=lyric_font, fill=self.text_color, spacing=self.line_space)
-		
+
 		y_song_name = margin + padding + lyric_h + self.song_name_space
 		# song_name = unicode('—— 「', "utf-8") + name + unicode('」', "utf-8")
 		song_name = u'—— 「' + name + u'」'
 		sw, sh = draw.textsize(song_name, font=lyric_font)
 		draw.text((w - margin - padding - sw, y_song_name), song_name, font=lyric_font, fill=self.text_color)
-		
+
 		# 添加网易标签
 		y_netease_banner = h - padding - self.netease_banner_size
 		out_img.paste(icon, (margin, y_netease_banner - 2))
 		draw.text((margin + self.icon_width + 5, y_netease_banner), self.netease_banner, font=banner_font, fill=self.netease_banner_color)
-		
-		img_save_path = ''
+
+		img_save_path = 'output/'
 		if self.save_dir is not None:
 			img_save_path = self.save_dir
 		out_img.save(img_save_path + name + '.png')
@@ -374,22 +374,22 @@ class Img():
 		out_img.paste(quote, (margin - self.style2_quote_width // 2, album_h + margin + self.style2_quote_width // 2))
 		quote = quote.rotate(180)
 		out_img.paste(quote, (w - margin - self.style2_quote_width // 2, album_h + margin + rect_h - self.style2_quote_width - self.style2_quote_width // 2))
-		
+
 		# 添加文字
 		draw.text((margin + padding, album_h + margin + padding), lrc, font=lyric_font, fill=self.text_color, spacing=self.line_space)
-		
+
 		y_song_name = album_h + margin + padding + lyric_h + self.song_name_space
 		# song_name = unicode('—— 「', "utf-8") + name + unicode('」', "utf-8")
 		song_name = u'—— 「' + name + u'」'
 		sw, sh = draw.textsize(song_name, font=lyric_font)
 		draw.text((w - margin - padding - sw, y_song_name), song_name, font=lyric_font, fill=self.text_color)
-		
+
 		# 添加网易标签
 		y_netease_banner = h - padding - self.netease_banner_size
 		out_img.paste(icon, (margin, y_netease_banner - 2))
 		draw.text((margin + self.icon_width + 5, y_netease_banner), self.netease_banner, font=banner_font, fill=self.netease_banner_color)
-		
-		img_save_path = ''
+
+		img_save_path = 'output/'
 		if self.save_dir is not None:
 			img_save_path = self.save_dir
 		out_img.save(img_save_path + name + '.png')
@@ -411,7 +411,7 @@ def main():
 	parser.add_option('-i', dest='img_file', type='string', help='your own image')
 	parser.add_option('-w', dest='text', type='string', help='some text')
 	parser.add_option('-n', dest='name', type='string', help='name')
-	parser.add_option('-l', dest="show_lyrics", action="store_true", default=False, 
+	parser.add_option('-l', dest="show_lyrics", action="store_true", default=False,
 						help="only show the lyrics with line number to stdout")
 	(options, args) = parser.parse_args()
 	sid = options.sid
@@ -455,7 +455,7 @@ def main():
 	elif text is not None:
 		text = text.replace('\\n','\n')
 		text = unicode_str(text)
-		
+
 		if img_file is None:
 			img_file = 'res/dog.png'
 		if name is None:
